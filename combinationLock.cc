@@ -1,10 +1,11 @@
-#include <combinationLock.h>
+#include "combinationLock.h"
+#include <sstream>
 
 //------------------------------------------------------------------------------
 // Constructor
 
 CombinationLock::CombinationLock(int numberOfButtons)
-    : _numberOfButtons(numberOfButtons), _root(NULL) {}
+    : _root(NULL), _numberOfButtons(numberOfButtons){}
 
 
 //------------------------------------------------------------------------------
@@ -23,7 +24,7 @@ void CombinationLock::printAllCombinationsHelper(
         Node* node, std::string previousCombination){
 
     if(node->_restButtons.empty()) return;
-    for (std::auto it = node->_edges.begin(); it != node->_edges.end(); it++){
+    for (std::vector<Edge>::iterator it = node->_edges.begin(); it != node->_edges.end(); it++){
         std::string currentCombination = previousCombination + (*it)._pressedButtons;
         std::cout << currentCombination << std::endl;
 
@@ -41,7 +42,7 @@ void CombinationLock::buildButtonsTree(){
     // At beginning, all buttons are available to be pressed 
     for (int i = 1; i<=_numberOfButtons; ++i){
         std::string buttonNumber = convertIntegerToString(i);
-        _root._restButtons.push_back(buttonNumber);
+        _root->_restButtons.push_back(buttonNumber);
     }
     buildButtonsTreeHelper(_root);
 }
@@ -51,40 +52,43 @@ void CombinationLock::buildButtonsTree(){
 
 void CombinationLock::buildButtonsTreeHelper(Node* node){
     if(node->_restButtons.empty()) return;
-
-
     // Presss 1 button
     //
     // Iterate by iterator+index so we can erase by index later
-    for (std::auto it = node->_restButtons.begin(), int i=0; 
-            it+i != node->_restButtons.end(); ++i){
+    {
+        std::vector<std::string>::iterator it;
+        int i;
+        for (it = node->_restButtons.begin(), i=0;
+                it+i != node->_restButtons.end(); ++i){
 
-        // Choose a button to press
-        std::string button = *(it+i);
+            // Choose a button to press
+            std::string button = *(it+i);
 
-        // Construct a new child node
-        Node* child = new Node();
+            // Construct a new child node
+            Node* child = new Node();
 
-        // Copy the current rest Buttons and remove the pressed one
-        child->_restButtons = node->_restButtons;
-        child->_restButtons.erase(child->_restButtons.begin()+i);
+            // Copy the current rest Buttons and remove the pressed one
+            child->_restButtons = node->_restButtons;
+            child->_restButtons.erase(child->_restButtons.begin()+i);
 
-        // Construct a new edge with the pressed button and the new child as the
-        // target
-        Edge newEdge = Edge(button, child);
+            // Construct a new edge with the pressed button and the new child as the
+            // target
+            Edge newEdge = Edge(button, child);
 
-        // Add this new edge to current node
-        node->_edges.push_back(newEdge);
+            // Add this new edge to current node
+            node->_edges.push_back(newEdge);
 
-        // Recursion
-        buildButtonsTreeHelper(child);
+            // Recursion
+            buildButtonsTreeHelper(child);
+        }
     }
 
 
     // Presss 2 buttons simultaneously
     if (node->_restButtons.size()>1){
-        for (std::auto it = node->_restButtons.begin, int i = 0;
-                it+i != node->_restButtons.end(); ++i) {
+        std::vector<std::string>::iterator it;
+        int i;
+        for (it = node->_restButtons.begin(), i=0; it+i != node->_restButtons.end(); ++i) {
             for (int j = i+1; it+j != node->_restButtons.end(); ++j) {
 
                 // Choose 2 buttons to press simultaneously
@@ -99,8 +103,8 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 
                 // Since j is always after i, so remove j first to avoid
                 // the effect of shifting the array to left 
-                child->_restButtons.erase(child->_restButtons.begin+j);
-                child->_restButtons.erase(child->_restButtons.begin+i);
+                child->_restButtons.erase(child->_restButtons.begin()+j);
+                child->_restButtons.erase(child->_restButtons.begin()+i);
 
                 // Constrcut a new edge with the pressed buttons and the new
                 // child as the target
@@ -111,6 +115,8 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 
                 // Recursion
                 buildButtonsTreeHelper(child);
+            }
+        }
     }
 }
 
@@ -119,7 +125,7 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 
 std::string CombinationLock::convertIntegerToString(int i){
     std::ostringstream convert;
-    covert<<i;
+    convert<<i;
     return convert.str();
 }
 
@@ -127,5 +133,7 @@ std::string CombinationLock::convertIntegerToString(int i){
 // Destructor
 
 CombinationLock::~CombinationLock() {
-    delete _root;
+    if (_root != NULL){
+        delete _root;
+    }
 }

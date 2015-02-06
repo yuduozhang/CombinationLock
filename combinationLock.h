@@ -34,30 +34,33 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 class CombinationLock {
     public:
         CombinationLock(int numberOfButtons);
         void printAllCombinations();
+
         virtual ~CombinationLock();
 
     private:
+        struct Edge;
         struct Node {
             std::vector<std::string> _restButtons; 
             std::vector<Edge> _edges;
-        } // Node
+        }; 
 
         struct Edge {
             const std::string _pressedButtons;
-            Node* const _target;
+            Node* _target;
 
-            Edge(const std::string& pressedButtons, Node* const target)
+            Edge(const std::string& pressedButtons, Node* target)
                 : _pressedButtons(pressedButtons), _target(target) {}
 
-            ~Edge(){ 
-                delete _target; 
+            ~Edge(){
+                std::cout << "Edge: " << _pressedButtons << std::endl;
             }
-        }
+        };
 
     private: 
         Node* _root;
