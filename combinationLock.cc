@@ -149,16 +149,12 @@ CombinationLock::Edge::Edge(const std::string& pressedButtons, Node* target)
 // Destructor of the inner structure Edge
 
 CombinationLock::Edge::~Edge(){
-    if (_target != NULL){
-        delete _target;
-    }
+    if (_target != NULL) delete _target;
 }
 
 //------------------------------------------------------------------------------
 // Destructor of CombinationLock
 
 CombinationLock::~CombinationLock() {
-    if (_root != NULL){
-        delete _root;
-    }
+    if (_root != NULL) delete _root;
 }
