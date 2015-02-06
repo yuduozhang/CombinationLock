@@ -33,6 +33,7 @@
 #define COMBINATIONLOCK_H_
 
 #include <iostream>
+#include <vector>
 
 class CombinationLock {
     public:
@@ -44,7 +45,7 @@ class CombinationLock {
         struct Node {
             std::vector<std::string> _restButtons; 
             std::vector<Edge> _edges;
-        }
+        } // Node
 
         struct Edge {
             const std::string _pressedButtons;
