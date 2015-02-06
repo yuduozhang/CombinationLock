@@ -47,17 +47,26 @@ class CombinationLock {
         struct Edge;
         struct Node {
             std::vector<std::string> _restButtons; 
-            std::vector<Edge*> _edges;
+            std::vector<Edge> _edges;
 
-            ~Node();
+            ~Node(){
+                std::cout << "Node " << std::endl;
+            }
         }; 
 
         struct Edge {
             const std::string _pressedButtons;
             Node* _target;
 
-            Edge(const std::string& pressedButtons, Node* target);
-            ~Edge();
+            Edge(const std::string& pressedButtons, Node* target)
+                : _pressedButtons(pressedButtons), _target(target) {}
+
+            ~Edge(){
+                if (_target != null){
+
+                }
+                std::cout << "Edge: " << _pressedButtons << std::endl;
+            }
         };
 
     private: 

@@ -24,12 +24,12 @@ void CombinationLock::printAllCombinationsHelper(
         Node* node, std::string previousCombination){
 
     if(node->_restButtons.empty()) return;
-    for (std::vector<Edge>::iterator it = node->_edges.begin(); it != node->_edges.end(); it++){
-        std::string currentCombination = previousCombination + (*it)._pressedButtons;
+    for (std::vector<Edge*>::iterator it = node->_edges.begin(); it != node->_edges.end(); it++){
+        std::string currentCombination = previousCombination + (*it)->_pressedButtons;
         std::cout << currentCombination << std::endl;
 
         // Recursion
-        printAllCombinationsHelper((*it)._target, currentCombination+" ");
+        printAllCombinationsHelper((*it)->_target, currentCombination+" ");
     }
 }
 
@@ -73,7 +73,7 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 
             // Construct a new edge with the pressed button and the new child as the
             // target
-            Edge newEdge = Edge(button, child);
+            Edge* newEdge = new Edge(button, child);
 
             // Add this new edge to current node
             node->_edges.push_back(newEdge);
@@ -108,7 +108,7 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 
                 // Constrcut a new edge with the pressed buttons and the new
                 // child as the target
-                Edge newEdge = Edge(button1 + "-" + button2, child);
+                Edge* newEdge = new Edge(button1 + "-" + button2, child);
 
                 // Add this new edge to current node
                 node->_edges.push_back(newEdge);
@@ -130,7 +130,32 @@ std::string CombinationLock::convertIntegerToString(int i){
 }
 
 //------------------------------------------------------------------------------
-// Destructor
+// Destructor of the inner structure Node
+
+CombinationLock::Node::~Node(){
+    unsigned int numOfEdges = _edges.size();
+    for(unsigned int i=0; i<numOfEdges; ++i){
+        if(_edges[i]!=NULL) delete _edges[i];
+    }
+}
+
+//------------------------------------------------------------------------------
+// Constructor of the inner structure Edge
+
+CombinationLock::Edge::Edge(const std::string& pressedButtons, Node* target)
+    : _pressedButtons(pressedButtons), _target(target) {}
+
+//------------------------------------------------------------------------------
+// Destructor of the inner structure Edge
+
+CombinationLock::Edge::~Edge(){
+    if (_target != NULL){
+        delete _target;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Destructor of CombinationLock
 
 CombinationLock::~CombinationLock() {
     if (_root != NULL){
