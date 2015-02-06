@@ -1,4 +1,4 @@
-#include <CombinationLock.h>
+#include <combinationLock.h>
 
 //------------------------------------------------------------------------------
 // Constructor
