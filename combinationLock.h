@@ -38,7 +38,7 @@
 
 class CombinationLock {
     public:
-        CombinationLock(int numberOfButtons);
+        CombinationLock (const int numberOfButtons);
         void printAllCombinations();
 
         virtual ~CombinationLock();
@@ -54,23 +54,24 @@ class CombinationLock {
 
         struct Edge {
             const std::string _pressedButtons;
-            Node* _target;
+            Node* const _target;
 
-            Edge(const std::string& pressedButtons, Node* target);
+            Edge (const std::string& pressedButtons, Node* const target);
             ~Edge();
         };
 
     private: 
         Node* _root;
-        int _numberOfButtons;
+        const int _numberOfButtons;
 
-        void printAllCombinationsHelper(Node* node, std::string previousCombination);
+        void printAllCombinationsHelper (Node* const node, 
+                std::string previousCombination) const;
+
         void buildButtonsTree();
-        void buildButtonsTreeHelper(Node* node);
-        std::string convertIntegerToString(int i);
+
+        void buildButtonsTreeHelper (Node* const node);
+
+        std::string convertIntegerToString (int i) const;
 };
 
 #endif // COMBINATIONLOCK_H_
-
-
-

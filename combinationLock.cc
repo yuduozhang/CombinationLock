@@ -2,14 +2,14 @@
 #include <sstream>
 
 //------------------------------------------------------------------------------
-// Constructor
+// Constructor:
 
-CombinationLock::CombinationLock(int numberOfButtons)
+CombinationLock::CombinationLock (const int numberOfButtons)
     : _root(NULL), _numberOfButtons(numberOfButtons){}
 
 
 //------------------------------------------------------------------------------
-// 
+// printAllCombinations:
 
 void CombinationLock::printAllCombinations(){
     if(_root == NULL) buildButtonsTree();
@@ -21,11 +21,13 @@ void CombinationLock::printAllCombinations(){
 // Print all paths starting from root recursively
 
 void CombinationLock::printAllCombinationsHelper(
-        Node* node, std::string previousCombination){
+        Node* const node, std::string previousCombination) const{
 
     if(node->_restButtons.empty()) return;
-    for (std::vector<Edge*>::iterator it = node->_edges.begin(); it != node->_edges.end(); it++){
-        std::string currentCombination = previousCombination + (*it)->_pressedButtons;
+    for (std::vector<Edge*>::iterator it = node->_edges.begin(); 
+            it != node->_edges.end(); ++it){
+        std::string currentCombination = 
+            previousCombination + (*it)->_pressedButtons;
         std::cout << currentCombination << std::endl;
 
         // Recursion
@@ -50,7 +52,7 @@ void CombinationLock::buildButtonsTree(){
 //------------------------------------------------------------------------------
 // buildButtonsTreeHelper: a recursive helper function
 
-void CombinationLock::buildButtonsTreeHelper(Node* node){
+void CombinationLock::buildButtonsTreeHelper (Node* const node){
     if(node->_restButtons.empty()) return;
     // Presss 1 button
     //
@@ -71,8 +73,8 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
             child->_restButtons = node->_restButtons;
             child->_restButtons.erase(child->_restButtons.begin()+i);
 
-            // Construct a new edge with the pressed button and the new child as the
-            // target
+            // Construct a new edge with the pressed button and the new child as
+            // the target
             Edge* newEdge = new Edge(button, child);
 
             // Add this new edge to current node
@@ -88,7 +90,8 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
     if (node->_restButtons.size()>1){
         std::vector<std::string>::iterator it;
         int i;
-        for (it = node->_restButtons.begin(), i=0; it+i != node->_restButtons.end(); ++i) {
+        for (it = node->_restButtons.begin(), i=0; 
+                it+i != node->_restButtons.end(); ++i) {
             for (int j = i+1; it+j != node->_restButtons.end(); ++j) {
 
                 // Choose 2 buttons to press simultaneously
@@ -123,7 +126,7 @@ void CombinationLock::buildButtonsTreeHelper(Node* node){
 //------------------------------------------------------------------------------
 // convertIntegerToString: 
 
-std::string CombinationLock::convertIntegerToString(int i){
+std::string CombinationLock::convertIntegerToString (const int i) const{
     std::ostringstream convert;
     convert<<i;
     return convert.str();
@@ -133,16 +136,18 @@ std::string CombinationLock::convertIntegerToString(int i){
 // Destructor of the inner structure Node
 
 CombinationLock::Node::~Node(){
-    unsigned int numOfEdges = _edges.size();
-    for(unsigned int i=0; i<numOfEdges; ++i){
-        if(_edges[i]!=NULL) delete _edges[i];
+
+    for (std::vector<Edge*>::iterator it = _edges.begin();
+            it != _edges.end(); ++it){
+        if ((*it) != NULL) delete (*it);
     }
 }
 
 //------------------------------------------------------------------------------
 // Constructor of the inner structure Edge
 
-CombinationLock::Edge::Edge(const std::string& pressedButtons, Node* target)
+CombinationLock::Edge::Edge (const std::string& pressedButtons, 
+                            Node* const target)
     : _pressedButtons(pressedButtons), _target(target) {}
 
 //------------------------------------------------------------------------------
