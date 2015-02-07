@@ -32,7 +32,6 @@
 #ifndef COMBINATIONLOCK_H_
 #define COMBINATIONLOCK_H_
 
-#include <iostream>
 #include <vector>
 #include <string>
 

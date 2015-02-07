@@ -1,4 +1,5 @@
 #include "combinationLock.h"
+#include <iostream>
 #include <sstream>
 
 //------------------------------------------------------------------------------
