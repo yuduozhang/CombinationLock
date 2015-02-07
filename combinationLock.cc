@@ -12,7 +12,7 @@ CombinationLock::CombinationLock (const int numberOfButtons)
 // printAllCombinations:
 
 void CombinationLock::printAllCombinations(){
-    if(_root == NULL) buildButtonsTree();
+    if(NULL == _root) buildButtonsTree();
     printAllCombinationsHelper(_root, "");
 }
 
@@ -126,40 +126,40 @@ void CombinationLock::buildButtonsTreeHelper (Node* const node){
 //------------------------------------------------------------------------------
 // convertIntegerToString: 
 
-std::string CombinationLock::convertIntegerToString (const int i) const{
+inline std::string CombinationLock::convertIntegerToString (const int i) {
     std::ostringstream convert;
     convert<<i;
     return convert.str();
 }
 
 //------------------------------------------------------------------------------
-// Destructor of the inner structure Node
+// Destructor of the nested struct Node
 
 CombinationLock::Node::~Node(){
 
     for (std::vector<Edge*>::iterator it = _edges.begin();
             it != _edges.end(); ++it){
-        if ((*it) != NULL) delete (*it);
+        if (NULL != (*it)) delete (*it);
     }
 }
 
 //------------------------------------------------------------------------------
-// Constructor of the inner structure Edge
+// Constructor of the nested struct Edge
 
 CombinationLock::Edge::Edge (const std::string& pressedButtons, 
                             Node* const target)
     : _pressedButtons(pressedButtons), _target(target) {}
 
 //------------------------------------------------------------------------------
-// Destructor of the inner structure Edge
+// Destructor of the nested struct Edge
 
 CombinationLock::Edge::~Edge(){
-    if (_target != NULL) delete _target;
+    if (NULL != _target) delete _target;
 }
 
 //------------------------------------------------------------------------------
 // Destructor of CombinationLock
 
 CombinationLock::~CombinationLock() {
-    if (_root != NULL) delete _root;
+    if (NULL != _root) delete _root;
 }

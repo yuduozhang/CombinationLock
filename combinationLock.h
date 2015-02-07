@@ -38,12 +38,14 @@
 
 class CombinationLock {
     public:
+        /*----- member functions -----*/
         CombinationLock (const int numberOfButtons);
         void printAllCombinations();
 
-        virtual ~CombinationLock();
+        ~CombinationLock();
 
     private:
+        /*----- nested structs -----*/
         struct Edge;
         struct Node {
             std::vector<std::string> _restButtons; 
@@ -61,17 +63,22 @@ class CombinationLock {
         };
 
     private: 
+        /*----- data members -----*/
         Node* _root;
         const int _numberOfButtons;
 
+
+        /*----- member functions -----*/
+
+        // Disable the default constructor
+        CombinationLock();
+
         void printAllCombinationsHelper (Node* const node, 
                 std::string previousCombination) const;
-
         void buildButtonsTree();
-
         void buildButtonsTreeHelper (Node* const node);
+        inline std::string convertIntegerToString (int i);
 
-        std::string convertIntegerToString (int i) const;
 };
 
 #endif // COMBINATIONLOCK_H_
