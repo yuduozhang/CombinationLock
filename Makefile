@@ -1,4 +1,3 @@
-# Declaration of variables
 CC = g++
 CFLAGS = -Wall -g
 LDFLAGS = -lm
